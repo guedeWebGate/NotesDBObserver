@@ -38,6 +38,8 @@ public class Database implements Serializable {
 	@DominoEntity(FieldName = "BusinessOwner")
 	private String m_BusinessOwner;
 
+	@DominoEntity(FieldName="@NoteId", isFormula=true)
+	private String m_DocNoteId;
 	public String getServer() {
 		return m_Server;
 	}
@@ -120,5 +122,13 @@ public class Database implements Serializable {
 
 	public void setBody(MimeMultipart body) {
 		m_Body = body;
+	}
+
+	public void setDocNoteId(String docNoteId) {
+		m_DocNoteId = docNoteId;
+	}
+
+	public String getDocNoteId() {
+		return m_DocNoteId;
 	}
 }

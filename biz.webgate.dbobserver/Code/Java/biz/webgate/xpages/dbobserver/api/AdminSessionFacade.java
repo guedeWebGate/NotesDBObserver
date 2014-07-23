@@ -14,6 +14,7 @@ import biz.webgate.xpages.dbobserver.bo.Scope;
 import biz.webgate.xpages.dbobserver.bo.SearchPattern;
 import biz.webgate.xpages.dbobserver.store.DatabaseStorageService;
 import biz.webgate.xpages.dbobserver.store.SearchPatternStorageService;
+import biz.webgate.xpages.dbobserver.util.ACLOpener;
 
 public class AdminSessionFacade {
 
@@ -74,9 +75,11 @@ public class AdminSessionFacade {
 		return map;
 	}
 
-	public void scanDB(String server, String dbName) {
+	public void scanDB(Database scanDB) {
 		try {
-			DXLHelper.INSTANCE.buildTree(server, dbName, getAllSearchPatterns());
+			if (ACLOpener.INSTANCE.openACL(scanDB)) {
+				DXLHelper.INSTANCE.buildTree(scanDB.getServer(), scanDB.getPath(), getAllSearchPatterns());
+			}
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
