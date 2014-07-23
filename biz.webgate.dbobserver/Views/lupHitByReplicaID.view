@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<note class='view' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.0'
+ replicaid='C1257D1C0055A607'>
+<noteinfo noteid='24e' unid='8D0C692581D456C2C1257D1E004A6FF0' sequence='4'>
+<created><datetime dst='true'>20140723T153303,20+02</datetime></created>
+<modified><datetime dst='true'>20140723T153414,49+02</datetime></modified>
+<revised><datetime dst='true'>20140723T153414,48+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20140723T153926,17+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20140723T153303,21+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Christian Guedemann/O=WGC/C=CH</name></updatedby>
+<wassignedby><name>CN=Christian Guedemann/O=WGC/C=CH</name></wassignedby>
+<item name='$FormulaClass' sign='true'><text>1</text></item>
+<item name='$TITLE' sign='true'><text>lupHitByReplicaID</text></item>
+<item name='$Index' sign='true'><text/></item>
+<item name='$Formula' summary='true' sign='true'><formula compiled='true'>
+YAAFADYAMgAFAAkACgAEAAkABABSZXBsaWNhSUREZXNpZ25OYW1lUGF0aCRDb25mbGljdCRSRUYE
+AAQAAAAaAAUABABGb3JtAQAGAGZybUhpdAoCAwAHAAoABAAJTDFT
+</formula></item>
+<item name='$Collation' summary='true'>
+<rawitemdata type='2'>
+FgABAABECGYHAAAJAFJlcGxpY2FJRA==
+</rawitemdata></item>
+<item name='$ViewFormat' summary='true' sign='true'>
+<rawitemdata type='5'>
+AQADAAMACAAAAFZDAwAJAAkAAAAAADAAAQAACgABAAAAAAAAAAICAAAAVkMAAAoACgAAAAAAUAAB
+AAAKAAAAAAAAAAAAAgIAAABWQwAABAAEAAAAAABQAAEAAAoAAAAAAAAAAAACAgAAAFJlcGxpY2FJ
+RFJlcGxpY2FJRERlc2lnbk5hbWVEZXNpZ25OYW1lUGF0aFBhdGgmAAEAAAABAQAJAQAACgEBDgoA
+AAEArSsBAAEAAQAAAAAAAAAAAFdDAQEACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAAAAAAA
+AAAAAAAAAABXQwEBAAkAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAD//wAAAAAAAAAAAAAAAAAAV0MB
+AQAJAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA//8AAAAAAAAAAAAAAAAAAEIAAAAAAAEA////AAUA
+////AAEAAAAAAAAAAAAAAAAAAQD///8AAQD///8AAAABAAAAAAABAAAAAAABAAAAAAAAAAgAAAAA
+AAEA
+</rawitemdata></item>
+<item name='$Comment' sign='true'><text/></item>
+<item name='$Flags'><text>PY</text></item>
+<item name='$DesignerVersion'><text>8.5.3</text></item></note>
+

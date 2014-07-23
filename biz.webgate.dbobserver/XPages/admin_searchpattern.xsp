@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core"
+	xmlns:xc="http://www.ibm.com/xsp/custom"
+	xmlns:xpt="http://www.openntf.org/xsp/xpt"
+	xmlns:xe="http://www.ibm.com/xsp/coreex">
+
+	
+	<xc:ccApplication navigationPath="admin\searchpattern"
+		pageTitle="Search Pattern">
+		<xp:this.facets>
+			<xp:panel xp:key="facetRight"></xp:panel>
+			<xp:panel xp:key="facetMiddle">
+				<xp:button value="New Search Pattern" id="btNew">
+					<xp:eventHandler event="onclick" submit="true"
+						refreshMode="complete">
+						<xp:this.action><![CDATA[#{javascript:viewScope.searchPattern = "";
+viewScope.action = "newObject";
+var dlg = getComponent("dlgSearchPattern");
+dlg.show();}]]></xp:this.action>
+					</xp:eventHandler></xp:button>
+				<xp:viewPanel rows="30" id="searchPatternPanel"
+					var="searchPattern" cellpadding="2">
+					<xp:this.facets>
+						<xp:pager partialRefresh="true"
+							layout="Previous Group Next" xp:key="headerPager" id="pager1">
+						</xp:pager>
+						<xp:pager partialRefresh="true"
+							layout="Previous Group Next" xp:key="footerPager" id="pager2">
+						</xp:pager>
+					</xp:this.facets>
+
+					<xp:this.data>
+						<xpt:objectlistSource
+							buildValues="#{javascript:adminBean.getAllSearchPatterns()}"
+							sortAttribute="pattern" var="lstSearchPattern" scope="view"
+							ascending="true">
+							<xpt:this.sortableAttributes>
+								<xp:value>pattern</xp:value>
+								<xp:value>importance</xp:value>
+								<xp:value>type</xp:value>
+							</xpt:this.sortableAttributes>
+						</xpt:objectlistSource>
+					</xp:this.data>
+					<xp:viewColumn columnName="pattern" id="viewColumn1"
+						style="width:400px">
+						<xp:viewColumnHeader value="Pattern"
+							id="viewColumnHeader1" sortable="true">
+						</xp:viewColumnHeader>
+					</xp:viewColumn>
+					<xp:viewColumn columnName="type" id="viewColumn2">
+						<xp:viewColumnHeader value="Target"
+							id="viewColumnHeader2" sortable="true">
+						</xp:viewColumnHeader>
+					</xp:viewColumn>
+					<xp:viewColumn columnName="importance"
+						id="viewColumn3">
+						<xp:viewColumnHeader value="Importance"
+							id="viewColumnHeader3" sortable="true">
+						</xp:viewColumnHeader>
+					</xp:viewColumn>
+					<xp:viewColumn columnName="" id="viewColumn4">
+						<xp:viewColumnHeader value=""
+							id="viewColumnHeader4">
+						</xp:viewColumnHeader>
+						<xp:link escape="true" text="Edit"
+							id="lnkEdit">
+							<xp:eventHandler event="onclick"
+								submit="true" refreshMode="complete">
+								<xp:this.action><![CDATA[#{javascript:viewScope.searchPattern = searchPattern.ID;
+viewScope.action = "editObject";
+var dlg = getComponent("dlgSearchPattern");
+dlg.show();}]]></xp:this.action>
+							</xp:eventHandler>
+						</xp:link>
+					</xp:viewColumn>
+				</xp:viewPanel>
+				<xe:dialog id="dlgSearchPattern" title="Search Pattern">
+				<xp:panel>
+					<xp:this.data>
+						<xpt:dssObjectSource var="editSearchPattern"
+							action="#{javascript:viewScope.action}"
+							objectId="#{javascript:viewScope.searchPattern}"
+							objectStorageService="#{javascript:adminBean.getSearchPatternSOS()}"
+							scope="view" ignoreRequestParams="true">
+						</xpt:dssObjectSource>
+					</xp:this.data>
+					<xe:dialogContent id="dialogContent1">
+						<xe:formTable id="formTable1"
+							disableRowError="true" labelWidth="200px"
+							labelPosition="above">
+							<xe:formRow id="formRow1" for="inputText1"
+								label="Pattern">
+								<xp:inputText id="inputText1"
+									value="#{editSearchPattern.pattern}" size="80"
+									required="true">
+									<xp:this.validators>
+										<xp:validateRequired
+											message="Please enter a search Value">
+										</xp:validateRequired>
+									</xp:this.validators>
+								</xp:inputText>
+							</xe:formRow>
+							<xe:formRow id="formRow2" for="radioGroup1"
+								label="Target">
+								<xp:radioGroup id="radioGroup1"
+									value="#{editSearchPattern.typeTXT}">
+									<xp:selectItems>
+										<xp:this.value><![CDATA[#{javascript:biz.webgate.xpages.dbobserver.bo.PatternType.values();}]]></xp:this.value>
+									</xp:selectItems>
+								</xp:radioGroup>
+							</xe:formRow>
+							<xe:formRow id="formRow3" for="radioGroup2"
+								label="Importance">
+								<xp:radioGroup id="radioGroup2"
+									value="#{editSearchPattern.importanceTXT}">
+
+									<xp:selectItems>
+										<xp:this.value><![CDATA[#{javascript:biz.webgate.xpages.dbobserver.bo.Importance.values();}]]></xp:this.value>
+									</xp:selectItems>
+								</xp:radioGroup>
+							</xe:formRow>
+						</xe:formTable></xe:dialogContent>
+					<xe:dialogButtonBar id="dialogButtonBar1">
+						<xp:button id="btSave" value="Save"><xp:eventHandler event="onclick" submit="true" refreshMode="complete">
+	<xp:this.action>
+
+		<xp:actionGroup>
+			<xp:saveDocument var="editSearchPattern"></xp:saveDocument>
+			<xp:executeScript>
+				<xp:this.script><![CDATA[#{javascript:@XPTFindDataSource("searchPatternPanel", "lstSearchPattern").refresh();
+getComponent("dlgSearchPattern").hide("searchPatternPanel");}]]></xp:this.script>
+			</xp:executeScript>
+		</xp:actionGroup>
+	</xp:this.action></xp:eventHandler></xp:button>
+						<xp:button value="Cancel" id="btCancel">
+							<xp:eventHandler event="onclick"
+								submit="true" refreshMode="complete" immediate="true">
+								<xp:this.action><![CDATA[#{javascript:getComponent("dlgSearchPattern").hide("searchPatternPanel");}]]></xp:this.action>
+							</xp:eventHandler></xp:button>
+						 </xe:dialogButtonBar>
+				</xp:panel>
+				</xe:dialog>
+				
+			</xp:panel>
+
+			<xp:panel xp:key="facetLeft">
+				<xc:ccNavAll></xc:ccNavAll></xp:panel>
+		</xp:this.facets>
+	</xc:ccApplication>
+</xp:view>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="1.0" replicaid="C1257D1C0055A607" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="262" sequence="6" unid="E5DDAE0BED8ED874C1257D1E004D17D0">
+<created><datetime dst="true">20140723T160203,68+02</datetime></created>
+<modified><datetime dst="true">20140723T161233,99+02</datetime></modified>
+<revised><datetime dst="true">20140723T161233,98+02</datetime></revised>
+<lastaccessed><datetime dst="true">20140723T161233,99+02</datetime></lastaccessed>
+<addedtofile><datetime dst="true">20140723T160203,77+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Christian Guedemann/O=WGC/C=CH</name></updatedby>
+<wassignedby><name>CN=Christian Guedemann/O=WGC/C=CH</name></wassignedby>
+<item name="$Flags"><text>34567Cg~[</text></item>
+<item name="$TITLE"><text>biz/webgate/xpages/dbobserver/scanner/bulk/ActionListScanner.java</text></item>
+<item name="$DesignerVersion"><text>8.5.3</text></item>
+
+
+<item name="$FileNames" sign="true"><text>biz/webgate/xpages/dbobserver/scanner/bulk/ActionListScanner.java</text></item>
+
+
+</note>

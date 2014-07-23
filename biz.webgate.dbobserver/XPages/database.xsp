@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom"
+	xmlns:xpt="http://www.openntf.org/xsp/xpt" xmlns:xe="http://www.ibm.com/xsp/coreex">
+	<xp:this.data>
+		<xpt:dssObjectSource var="dbScan"
+			objectStorageService="#{javascript:adminBean.getDatabaseSOS()}"
+			scope="view">
+		</xpt:dssObjectSource>
+	</xp:this.data>
+
+	<xc:ccApplication navigationPath="content\database"
+		pageTitle="Databasedetails">
+		<xp:this.facets>
+			<xp:panel xp:key="facetRight">
+				<xp:button value="scan DB" id="button2">
+					<xp:eventHandler event="onclick" submit="true"
+						refreshMode="complete">
+						<xp:this.action><![CDATA[#{javascript:adminBean.scanDB(dbScan.server, dbScan.path)}]]></xp:this.action>
+					</xp:eventHandler>
+				</xp:button>
+			</xp:panel>
+			<xp:panel xp:key="facetMiddle">
+				<xe:formTable id="formTable1" formTitle="#{javascript:dbScan.name}">
+					<xp:this.facets>
+						<xe:dialogButtonBar id="dialogButtonBar1"
+							xp:key="footer">
+							<xp:button value="Edit" id="btEdit"
+								rendered="#{javascript:!dbScan.isEditable();}">
+								<xp:eventHandler event="onclick" submit="true"
+									refreshMode="complete">
+									<xp:this.action><![CDATA[#{javascript:context.redirectToPage("database.xsp?action=editObject&objectId="+dbScan.replicaID);}]]></xp:this.action>
+								</xp:eventHandler>
+							</xp:button>
+							<xp:button id="button3" value="Save"
+								rendered="#{javascript:dbScan.isEditable();}">
+								<xp:eventHandler event="onclick" submit="true"
+									refreshMode="complete">
+									<xp:this.action>
+
+										<xp:actionGroup>
+											<xp:saveDocument var="dbScan"></xp:saveDocument>
+											<xp:executeScript>
+												<xp:this.script><![CDATA[#{javascript:context.redirectToPage("database.xsp?action=openObject&objectId="+dbScan.replicaID);}]]></xp:this.script>
+											</xp:executeScript>
+										</xp:actionGroup>
+									</xp:this.action>
+								</xp:eventHandler>
+							</xp:button>
+							<xp:button value="Cancel" id="button1"
+								rendered="#{javascript:dbScan.isEditable();}">
+								<xp:eventHandler event="onclick" submit="true"
+									refreshMode="complete">
+									<xp:this.action><![CDATA[#{javascript:context.redirectToPage("database.xsp?action=openObject&objectId="+dbScan.replicaID);}]]></xp:this.action>
+								</xp:eventHandler>
+							</xp:button>
+						</xe:dialogButtonBar>
+					</xp:this.facets>
+					<xe:this.formDescription><![CDATA[#{javascript:dbScan.serverCN +" "+ dbScan.path}]]></xe:this.formDescription>
+					<xe:formRow id="formRow2" labelPosition="left"
+						for="oneuinamepicker1" label="Developer">
+						<xpt:oneuinamepicker displayLabel="false"
+							id="oneuinamepicker1" value="#{dbScan.devResponsible}" view="($Users)"
+							database="names.nsf">
+						</xpt:oneuinamepicker>
+					</xe:formRow>
+					<xe:formRow id="formRow3" for="oneuinamepicker2" label="Business Owner"
+						labelPosition="left">
+						<xpt:oneuinamepicker displayLabel="false"
+							id="oneuinamepicker2" value="#{dbScan.businessOwner}" database="names.nsf"
+							view="($Users)">
+						</xpt:oneuinamepicker>
+					</xe:formRow>
+					<xe:formRow id="formRow1" label="Instructions / Notes"
+						labelPosition="above" for="inputRichText1">
+						<xp:inputRichText id="inputRichText1" value="#{dbScan.body}">
+						</xp:inputRichText>
+					</xe:formRow>
+				</xe:formTable>
+			</xp:panel>
+			<xc:ccNavAll xp:key="facetLeft"></xc:ccNavAll>
+		</xp:this.facets>
+	</xc:ccApplication>
+</xp:view>

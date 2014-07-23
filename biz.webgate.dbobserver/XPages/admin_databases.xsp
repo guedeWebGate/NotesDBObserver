@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom"
+	xmlns:xpt="http://www.openntf.org/xsp/xpt" xmlns:xe="http://www.ibm.com/xsp/coreex">
+
+	<xc:ccApplication navigationPath="admin\databases"
+		pageTitle="Database Catalog">
+		<xp:this.facets>
+			<xp:panel xp:key="facetRight">
+				<xp:button value="Scan Server" id="btRunAgent">
+					<xp:eventHandler event="onclick" submit="false">
+						<xp:this.script><![CDATA[scanDB.startJob();]]></xp:this.script>
+					</xp:eventHandler>
+				</xp:button>
+				<xp:br></xp:br>
+
+				<xpt:agentprogressbar id="agentprogressbar1"
+					serviceName="scanDB" agentName="scanServer4Db">
+				</xpt:agentprogressbar>
+			</xp:panel>
+			<xp:panel xp:key="facetMiddle">
+
+			<xp:text escape="true" id="computedField1" tagName="h1">
+				<xp:this.value><![CDATA[#{javascript:if (paramValues.dbScope == null || paramValues.dbScope == "") {
+	return "All databases";
+} else {
+	var scopeName = ""+paramValues.dbScope;
+	var scope = adminBean.getDBScope(scopeName);
+	return "Databases: "+ scope.name();
+}}]]></xp:this.value>
+			</xp:text>
+			<xp:viewPanel rows="30" id="databasePanel" cellpadding="2"
+				var="dbStub" viewStyle="width:100%">
+				<xp:this.facets>
+					<xp:pager partialRefresh="true"
+						layout="Previous Group Next" xp:key="headerPager" id="pager1">
+					</xp:pager>
+					<xp:pager partialRefresh="true"
+						layout="Previous Group Next" xp:key="footerPager" id="pager2">
+					</xp:pager>
+				</xp:this.facets>
+
+				<xp:this.data>
+					<xpt:objectlistSource ascending="true"
+						ignoreRequestParams="true" scope="view" sortAttribute="name"
+						var="lstDbStub">
+						<xpt:this.sortableAttributes>
+							<xp:value>name</xp:value>
+							<xp:value>path</xp:value>
+							<xp:value>serverCN</xp:value>
+							<xp:value>scope</xp:value>
+							<xp:value>scanStatus</xp:value>
+							<xp:value>businessOwner</xp:value>
+							<xp:value>devResponsible</xp:value>
+						</xpt:this.sortableAttributes>
+						<xpt:this.buildValues><![CDATA[#{javascript:if (paramValues.dbScope == null || paramValues.dbScope == "") {
+	return adminBean.getAllDatabases();
+} else {
+	var scopeName = ""+paramValues.dbScope;
+	var scope = adminBean.getDBScope(scopeName);
+	return adminBean.getDatabasesByScope( scope );
+}
+	}]]></xpt:this.buildValues>
+					</xpt:objectlistSource>
+				</xp:this.data>
+				<xp:viewColumn columnName="name" id="viewColumn1">
+					<xp:viewColumnHeader value="Name"
+						id="viewColumnHeader1" sortable="true">
+					</xp:viewColumnHeader>
+				</xp:viewColumn>
+				<xp:viewColumn columnName="serverCN" id="viewColumn2">
+					<xp:viewColumnHeader value="Server"
+						id="viewColumnHeader2" sortable="true">
+					</xp:viewColumnHeader>
+				</xp:viewColumn>
+				<xp:viewColumn columnName="path" id="viewColumn3">
+					<xp:viewColumnHeader value="Path"
+						id="viewColumnHeader3" sortable="true">
+					</xp:viewColumnHeader>
+				</xp:viewColumn>
+				<xp:viewColumn columnName="scope" id="viewColumn8">
+					<xp:viewColumnHeader value="Scope"
+						id="viewColumnHeader8" sortable="true">
+					</xp:viewColumnHeader>
+				</xp:viewColumn>
+				<xp:viewColumn columnName="scanStatus"
+					id="viewColumn4">
+					<xp:viewColumnHeader value="Status"
+						id="viewColumnHeader4" sortable="true">
+					</xp:viewColumnHeader>
+				</xp:viewColumn>
+				<xp:viewColumn columnName="devResponsible"
+					id="viewColumn5">
+					<xp:viewColumnHeader value="Developer"
+						id="viewColumnHeader5" sortable="true">
+					</xp:viewColumnHeader>
+				</xp:viewColumn>
+				<xp:viewColumn columnName="businessOwner"
+					id="viewColumn6">
+					<xp:viewColumnHeader value="Business Owner"
+						id="viewColumnHeader6" sortable="true">
+					</xp:viewColumnHeader>
+				</xp:viewColumn>
+
+				<xp:viewColumn columnName="" id="viewColumn7">
+					<xp:viewColumnHeader value=""
+						id="viewColumnHeader7">
+					</xp:viewColumnHeader>
+					<xe:dropDownButton id="dropDownButton1">
+
+						<xe:this.treeNodes>
+
+
+
+							<xe:basicContainerNode label="actions">
+								<xe:this.children>
+									<xe:basicLeafNode label="Open">
+										<xe:this.submitValue><![CDATA[#{javascript:"replicaId=" + dbStub.replicaID +"&action=open"}]]></xe:this.submitValue>
+									</xe:basicLeafNode>
+									<xe:separatorTreeNode></xe:separatorTreeNode>
+									<xe:repeatTreeNode var="dbScope"
+										value="#{javascript:biz.webgate.xpages.dbobserver.bo.Scope.values()}">
+										<xe:this.children>
+											<xe:basicLeafNode
+												label="#{javascript:dbScope.name()}">
+												<xe:this.submitValue><![CDATA[#{javascript:"replicaId=" + dbStub.replicaID +"&action=setScope&scopeName="+dbScope.name();}]]></xe:this.submitValue>
+											</xe:basicLeafNode>
+										</xe:this.children>
+									</xe:repeatTreeNode>
+
+								</xe:this.children>
+							</xe:basicContainerNode>
+						</xe:this.treeNodes>
+						<xp:eventHandler event="onItemClick"
+							submit="true" refreshMode="complete">
+							<xe:this.action><![CDATA[#{javascript:var pValues = adminBean.getQueryMap(context.getSubmittedValue());
+if (pValues.action == "open") {
+	context.redirectToPage("database.xsp?action=openObject&objectId="+pValues.replicaId);
+}
+if (pValues.action == "setScope") {
+	adminBean.setDbScope(pValues.replicaId, pValues.scopeName);
+	context.reloadPage();
+}
+}]]></xe:this.action>
+						</xp:eventHandler>
+					</xe:dropDownButton>
+				</xp:viewColumn>
+
+
+			</xp:viewPanel>
+			</xp:panel>
+			<xp:panel xp:key="facetLeft">
+				<xc:ccNavAll></xc:ccNavAll></xp:panel>
+		</xp:this.facets>
+	</xc:ccApplication>
+</xp:view>
