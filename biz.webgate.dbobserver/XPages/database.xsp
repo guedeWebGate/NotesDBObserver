@@ -15,7 +15,7 @@
 				<xp:button value="scan DB" id="button2">
 					<xp:eventHandler event="onclick" submit="true"
 						refreshMode="complete">
-						<xp:this.action><![CDATA[#{javascript:adminBean.scanDB(dbScan.server, dbScan.path)}]]></xp:this.action>
+						<xp:this.action><![CDATA[#{javascript:adminBean.scanDB(dbScan.getBO())}]]></xp:this.action>
 					</xp:eventHandler>
 				</xp:button>
 			</xp:panel>

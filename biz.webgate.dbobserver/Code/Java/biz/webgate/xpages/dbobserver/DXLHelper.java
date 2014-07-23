@@ -23,10 +23,9 @@ public enum DXLHelper {
 
 	public List<Hit> buildTree(final String server, final String filePath, List<SearchPattern> patterns) throws Throwable {
 		List<Hit> hits = new LinkedList<Hit>();
-		System.out.println("Pattern: "+patterns);
+		System.out.println("Pattern: " + patterns);
 		Database dbDXL = getDatabaseDXL(server, filePath);
 		scanForCode(hits, dbDXL);
-		System.out.println(hits.size() + " result found!");
 		saveHits(hits);
 		checkPattern(hits, patterns);
 		return hits;
@@ -37,11 +36,9 @@ public enum DXLHelper {
 			hit.resetHitReason();
 			for (SearchPattern search : patterns) {
 				if (hit.getPatternType() == search.getType()) {
-					System.out.println("Check:"+ hit.getHitContent() +" against " + search.getPattern());
 					if (hit.getHitContent().toLowerCase().contains(search.getPattern().toLowerCase())) {
 						hit.addHitReason(search.getPattern(), search.getImportance());
 						HitStorageService.getInstance().save(hit);
-						System.out.println(search.getPattern() +" found!");
 					}
 				}
 			}
@@ -62,7 +59,6 @@ public enum DXLHelper {
 				List<Hit> currentHits = designElementTyp.getCodeScaner().runScan(obj, dbDXL.getReplicaid());
 				hits.addAll(currentHits);
 			}
-
 		}
 	}
 

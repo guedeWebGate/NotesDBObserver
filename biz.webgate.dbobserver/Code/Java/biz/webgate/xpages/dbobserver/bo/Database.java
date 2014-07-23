@@ -38,7 +38,7 @@ public class Database implements Serializable {
 	@DominoEntity(FieldName = "BusinessOwner")
 	private String m_BusinessOwner;
 
-	@DominoEntity(FieldName="@NoteId", isFormula=true)
+	@DominoEntity(FieldName="@ReplaceSubstring(@NoteID; \"NT00000\":\"NT0000\":\"NT000\":\"NT00\":\"NT0\"; \"\")", isFormula=true)
 	private String m_DocNoteId;
 	public String getServer() {
 		return m_Server;

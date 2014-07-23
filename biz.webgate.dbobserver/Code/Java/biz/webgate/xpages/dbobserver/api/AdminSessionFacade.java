@@ -10,6 +10,7 @@ import org.openntf.xpt.core.dss.SingleObjectStore;
 
 import biz.webgate.xpages.dbobserver.DXLHelper;
 import biz.webgate.xpages.dbobserver.bo.Database;
+import biz.webgate.xpages.dbobserver.bo.ScanStatus;
 import biz.webgate.xpages.dbobserver.bo.Scope;
 import biz.webgate.xpages.dbobserver.bo.SearchPattern;
 import biz.webgate.xpages.dbobserver.store.DatabaseStorageService;
@@ -79,6 +80,9 @@ public class AdminSessionFacade {
 		try {
 			if (ACLOpener.INSTANCE.openACL(scanDB)) {
 				DXLHelper.INSTANCE.buildTree(scanDB.getServer(), scanDB.getPath(), getAllSearchPatterns());
+				ACLOpener.INSTANCE.closeACL(scanDB);
+				scanDB.setScanStatus(ScanStatus.SCANNED);
+				DatabaseStorageService.getInstance().save(scanDB);
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
