@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:text tagName="h1">
+		<xp:this.value><![CDATA[#{javascript:"Scan Error report!"}]]></xp:this.value>
+	</xp:text>
+	<xp:table>
+		<xp:tr>
+			<xp:td valign="top">Error</xp:td>
+			<xp:td valign="top">
+				<xp:text value="#{dbScan.error}"></xp:text>
+			</xp:td>
+		</xp:tr>
+		<xp:tr>
+			<xp:td valign="top">Log</xp:td>
+			<xp:td valign="top">
+				<xp:text value="#{dbScan.errorLog}"></xp:text>
+			</xp:td>
+		</xp:tr>
+		<xp:tr>
+			<xp:td valign="top">Log Comment</xp:td>
+			<xp:td valign="top">
+				<xp:text value="#{dbScan.errorLogComment}"></xp:text>
+			</xp:td>
+		</xp:tr>
+		<xp:tr>
+			<xp:td valign="top">Trace</xp:td>
+			<xp:td valign="top">
+				<xp:text value="#{dbScan.stackTrace}" escape="false">
+					<xp:this.converter>
+						<xp:customConverter>
+							<xp:this.getAsString><![CDATA[#{javascript:@ReplaceSubstring(value, "\n", "<br />")}]]></xp:this.getAsString>
+							<xp:this.getAsObject><![CDATA[#{javascript:@ReplaceSubstring(value, "\n", "<br />")}]]></xp:this.getAsObject>
+						</xp:customConverter>
+					</xp:this.converter>
+				</xp:text>
+			</xp:td>
+		</xp:tr>
+	</xp:table>
+</xp:view>

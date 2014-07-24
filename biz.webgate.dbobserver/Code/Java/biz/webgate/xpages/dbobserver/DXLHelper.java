@@ -12,6 +12,7 @@ import org.openntf.jaxb.model.dxl.Database;
 import biz.webgate.xpages.dbobserver.bo.DesignElementType;
 import biz.webgate.xpages.dbobserver.bo.Hit;
 import biz.webgate.xpages.dbobserver.bo.SearchPattern;
+import biz.webgate.xpages.dbobserver.store.HitActionItemStorageService;
 import biz.webgate.xpages.dbobserver.store.HitStorageService;
 
 import com.ibm.xsp.extlib.util.ExtLibUtil;
@@ -19,11 +20,11 @@ import com.ibm.xsp.extlib.util.ExtLibUtil;
 public enum DXLHelper {
 	INSTANCE;
 
-	public List<Hit> buildTree(final String server, final String filePath, List<SearchPattern> patterns) throws Throwable {
+	public List<Hit> buildTree(final String server, final String filePath, List<SearchPattern> patterns, String replicaId)
+			throws DBObserverException {
 		List<Hit> hits = new LinkedList<Hit>();
-		System.out.println("Pattern: " + patterns);
 		Database dbDXL = getDatabaseDXL(server, filePath);
-		scanForCode(hits, dbDXL);
+		scanForCode(hits, dbDXL, replicaId);
 		saveHits(hits);
 		checkPattern(hits, patterns);
 		return hits;
@@ -37,6 +38,7 @@ public enum DXLHelper {
 					if (hit.getHitContent().toLowerCase().contains(search.getPattern().toLowerCase())) {
 						hit.addHitReason(search.getPattern(), search.getImportance());
 						HitStorageService.getInstance().save(hit);
+						HitActionItemStorageService.getInstance().findItem(hit.getID(), hit.getReplicaID());
 					}
 				}
 			}
@@ -49,28 +51,43 @@ public enum DXLHelper {
 		}
 	}
 
-	private void scanForCode(List<Hit> hits, Database dbDXL) {
+	private void scanForCode(List<Hit> hits, Database dbDXL, String replicaId) {
 		for (Object obj : dbDXL.getNoteOrDocumentOrProfiledocument()) {
 			DesignElementType designElementTyp = DesignElementType.getDesignType(obj);
 			if (designElementTyp == null) {
 			} else {
-				List<Hit> currentHits = designElementTyp.getCodeScaner().runScan(obj, dbDXL.getReplicaid());
+				List<Hit> currentHits = designElementTyp.getCodeScaner().runScan(obj, replicaId);
 				hits.addAll(currentHits);
 			}
 		}
 	}
 
-	private Database getDatabaseDXL(String server, String filePath) throws Throwable {
-		DxlExporter dxle = ExtLibUtil.getCurrentSession().createDxlExporter();
-		dxle.setOutputDOCTYPE(false);
-		lotus.domino.Database db = ExtLibUtil.getCurrentSession().getDatabase(server, filePath);
-		NoteCollection nc = db.createNoteCollection(false);
-		nc.selectAllDesignElements(true);
-		nc.buildCollection();
-		Database dxldb = DominoUtils.INSTANCE.getDXLDatabase(dxle, nc);
-		db.recycle();
-		nc.recycle();
-		return dxldb;
+	private Database getDatabaseDXL(final String server, final String filePath) throws DBObserverException {
+		DxlExporter dxle = null;
+		try {
+			dxle = ExtLibUtil.getCurrentSession().createDxlExporter();
+			dxle.setOutputDOCTYPE(false);
+			dxle.setExitOnFirstFatalError(false);
+			lotus.domino.Database db = ExtLibUtil.getCurrentSession().getDatabase(server, filePath);
+			NoteCollection nc = db.createNoteCollection(false);
+			nc.selectAllDesignElements(true);
+			nc.buildCollection();
+			Database dxldb = null;
+			dxldb = DominoUtils.INSTANCE.getDXLDatabase(dxle, nc);
+			db.recycle();
+			nc.recycle();
+			return dxldb;
+		} catch (Exception e) {
+			String log = "";
+			;
+			String logComment = "";
+			try {
+				log = dxle.getLog();
+				logComment = dxle.getLogComment();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+			throw new DBObserverException("Error during getDatabaseDXL", e, log, logComment);
+		}
 	}
-
 }

@@ -9,15 +9,80 @@
 	</xp:this.data>
 
 	<xc:ccApplication navigationPath="content\database"
-		pageTitle="Databasedetails">
+		pageTitle="Database details">
 		<xp:this.facets>
 			<xp:panel xp:key="facetRight">
-				<xp:button value="scan DB" id="button2">
-					<xp:eventHandler event="onclick" submit="true"
-						refreshMode="complete">
-						<xp:this.action><![CDATA[#{javascript:adminBean.scanDB(dbScan.getBO())}]]></xp:this.action>
-					</xp:eventHandler>
-				</xp:button>
+				<xe:widgetContainer id="widgetContainer1" type="sidebar">
+					<xe:this.titleBarText><![CDATA[Statistics & Work]]></xe:this.titleBarText>
+					<xp:panel>
+						<xp:table style="width:100.0%">
+							<xp:tr>
+								<xp:td>Status</xp:td>
+								<xp:td align="right">
+									<xp:text escape="true" id="computedField1" value="#{dbScan.scanStatus}">
+									</xp:text>
+								</xp:td>
+							</xp:tr>
+							<xp:tr>
+								<xp:td>Total Items</xp:td>
+								<xp:td align="right">
+									<xp:text escape="true" id="computedField3" value="#{dbScan.totalActionItems}">
+									</xp:text>
+								</xp:td>
+							</xp:tr>
+							<xp:tr>
+								<xp:td>Open Items</xp:td>
+								<xp:td align="right">
+									<xp:text escape="true" id="computedField2" value="#{dbScan.openActionItems}"
+										style="font-weight:bold">
+									</xp:text>
+								</xp:td>
+							</xp:tr>
+						</xp:table>
+						<xp:button value="scan DB" id="button2"
+							rendered="#{javascript:biz.webgate.xpages.dbobserver.bo.ScanStatus.CHECKED != dbScan.scanStatus}">
+							<xp:eventHandler event="onclick" submit="true"
+								refreshMode="complete">
+								<xp:this.action><![CDATA[#{javascript:adminBean.scanDB(dbScan.getBO());
+context.reloadPage();}]]></xp:this.action>
+							</xp:eventHandler>
+						</xp:button>
+						<xp:button id="btClose" value="Database is checked">
+							<xp:this.rendered><![CDATA[#{javascript:biz.webgate.xpages.dbobserver.bo.ScanStatus.CHECKED != dbScan.scanStatus && dbScan.openActionItems < 1 && biz.webgate.xpages.dbobserver.bo.ScanStatus.STUB != dbScan.scanStatus}]]></xp:this.rendered>
+							<xp:eventHandler event="onclick" submit="true"
+								refreshMode="complete">
+								<xp:this.action>
+
+									<xp:actionGroup>
+
+										<xp:executeScript
+											script="#{javascript:dbScan.scanStatus =biz.webgate.xpages.dbobserver.bo.ScanStatus.CHECKED;}">
+										</xp:executeScript>
+										<xp:saveDocument var="dbScan"></xp:saveDocument>
+									</xp:actionGroup>
+								</xp:this.action>
+							</xp:eventHandler>
+						</xp:button>
+						<xp:button id="btReopen" value="Reopen"
+							rendered="#{javascript:biz.webgate.xpages.dbobserver.bo.ScanStatus.CHECKED == dbScan.scanStatus}">
+							<xp:eventHandler event="onclick" submit="true"
+								refreshMode="complete">
+								<xp:this.action>
+
+									<xp:actionGroup>
+
+										<xp:executeScript
+											script="#{javascript:dbScan.scanStatus =biz.webgate.xpages.dbobserver.bo.ScanStatus.CHECKED;}">
+										</xp:executeScript>
+										<xp:saveDocument var="dbScan"></xp:saveDocument>
+									</xp:actionGroup>
+								</xp:this.action>
+							</xp:eventHandler>
+						</xp:button>
+					</xp:panel>
+				</xe:widgetContainer>
+
+
 			</xp:panel>
 			<xp:panel xp:key="facetMiddle">
 				<xe:formTable id="formTable1" formTitle="#{javascript:dbScan.name}">
@@ -76,8 +141,12 @@
 						</xp:inputRichText>
 					</xe:formRow>
 				</xe:formTable>
-				
-				<xc:ccHitListClever></xc:ccHitListClever></xp:panel>
+
+				<xc:ccHitListClever loaded="${javascript:dbScan.scanStatus.showHitList();}">
+				</xc:ccHitListClever>
+				<xc:ccErrorReport loaded="${javascript:dbScan.scanStatus.showError();}"></xc:ccErrorReport>
+			</xp:panel>
+
 			<xc:ccNavAll xp:key="facetLeft"></xc:ccNavAll>
 		</xp:this.facets>
 	</xc:ccApplication>

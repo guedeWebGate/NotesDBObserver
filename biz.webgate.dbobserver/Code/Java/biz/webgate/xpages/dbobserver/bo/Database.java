@@ -25,12 +25,12 @@ public class Database implements Serializable {
 	private String m_ReplicaID;
 	@DominoEntity(FieldName = "Name")
 	private String m_Name;
-	
+
 	@DominoEntity(FieldName = "Body")
 	private MimeMultipart m_Body;
 	@DominoEntity(FieldName = "Scope")
 	private Scope m_Scope = Scope.NORMAL;
-	
+
 	@DominoEntity(FieldName = "ScanStatus")
 	private ScanStatus m_ScanStatus = ScanStatus.STUB;
 	@DominoEntity(FieldName = "DevResponsible")
@@ -38,8 +38,25 @@ public class Database implements Serializable {
 	@DominoEntity(FieldName = "BusinessOwner")
 	private String m_BusinessOwner;
 
-	@DominoEntity(FieldName="@ReplaceSubstring(@NoteID; \"NT00000\":\"NT0000\":\"NT000\":\"NT00\":\"NT0\"; \"\")", isFormula=true)
+	@DominoEntity(FieldName = "@ReplaceSubstring(@NoteID; \"NT00000\":\"NT0000\":\"NT000\":\"NT00\":\"NT0\"; \"\")", isFormula = true)
 	private String m_DocNoteId;
+
+	@DominoEntity(FieldName = "Error")
+	private String m_Error;
+	@DominoEntity(FieldName = "ErrorLog")
+	private String m_ErrorLog;
+	@DominoEntity(FieldName = "ErrorLogComment")
+	private String m_ErrorLogComment;
+	@DominoEntity(FieldName = "StackTrace")
+	private String m_StackTrace;
+	
+	@DominoEntity(FieldName = "CodeElementsCount")
+	private int m_CodeElementsCount;
+	@DominoEntity(FieldName = "TotalActionItems")
+	private int m_TotalActionItems;
+	@DominoEntity(FieldName = "OpenActionItems")
+	private int m_OpenActionItems;
+
 	public String getServer() {
 		return m_Server;
 	}
@@ -59,7 +76,7 @@ public class Database implements Serializable {
 		}
 		return serverName;
 	}
-	
+
 	public String getPath() {
 		return m_Path;
 	}
@@ -130,5 +147,61 @@ public class Database implements Serializable {
 
 	public String getDocNoteId() {
 		return m_DocNoteId;
+	}
+
+	public void setError(String error) {
+		m_Error = error;
+	}
+
+	public String getError() {
+		return m_Error;
+	}
+
+	public void setErrorLog(String errorLog) {
+		m_ErrorLog = errorLog;
+	}
+
+	public String getErrorLog() {
+		return m_ErrorLog;
+	}
+
+	public void setErrorLogComment(String errorLogComment) {
+		m_ErrorLogComment = errorLogComment;
+	}
+
+	public String getErrorLogComment() {
+		return m_ErrorLogComment;
+	}
+
+	public void setStackTrace(String stackTrace) {
+		m_StackTrace = stackTrace;
+	}
+
+	public String getStackTrace() {
+		return m_StackTrace;
+	}
+
+	public void setCodeElementsCount(int codeElementsCount) {
+		m_CodeElementsCount = codeElementsCount;
+	}
+
+	public int getCodeElementsCount() {
+		return m_CodeElementsCount;
+	}
+
+	public void setTotalActionItems(int totalActionItems) {
+		m_TotalActionItems = totalActionItems;
+	}
+
+	public int getTotalActionItems() {
+		return m_TotalActionItems;
+	}
+
+	public void setOpenActionItems(int openActionItems) {
+		m_OpenActionItems = openActionItems;
+	}
+
+	public int getOpenActionItems() {
+		return m_OpenActionItems;
 	}
 }

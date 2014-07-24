@@ -162,10 +162,8 @@ public class Hit implements Serializable {
 		String contentHTML = m_HitContent;
 		if (hasHitReason()) {
 			for (String reason : m_HitReason) {
-				System.out.println(reason);
 				String[] reasonImp = reason.split("\\$");
 				String pattern = reasonImp[0].replace("(", "\\(");
-				System.out.println(pattern);
 				contentHTML = contentHTML.replaceAll("(?i)("+pattern+")", "<b>$1</b>");
 			}
 		}

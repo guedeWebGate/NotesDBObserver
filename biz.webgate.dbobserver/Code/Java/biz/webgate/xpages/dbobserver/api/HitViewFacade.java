@@ -6,11 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.ibm.commons.util.StringUtil;
-
+import biz.webgate.xpages.dbobserver.bo.Database;
 import biz.webgate.xpages.dbobserver.bo.DesignElementType;
 import biz.webgate.xpages.dbobserver.bo.Hit;
+import biz.webgate.xpages.dbobserver.bo.HitActionItem;
+import biz.webgate.xpages.dbobserver.bo.HitActionType;
+import biz.webgate.xpages.dbobserver.store.DatabaseStorageService;
+import biz.webgate.xpages.dbobserver.store.HitActionItemStorageService;
 import biz.webgate.xpages.dbobserver.store.HitStorageService;
+
+import com.ibm.commons.util.StringUtil;
 
 public class HitViewFacade implements Serializable {
 
@@ -20,6 +25,7 @@ public class HitViewFacade implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Hit> m_AllHits;
 	private List<String> m_Expanded = new ArrayList<String>();
+	private List<HitActionItem> m_ActionItems;
 
 	public List<Hit> getAllHits(String repID) {
 		checkHits(repID);
@@ -85,6 +91,42 @@ public class HitViewFacade implements Serializable {
 	private void checkHits(String repID) {
 		if (m_AllHits == null) {
 			m_AllHits = HitStorageService.getInstance().getObjectsByForeignId(repID, "lupHitByReplicaID");
+		}
+	}
+
+	public HitActionItem getHitActionItem(String repID, String actionItemId) {
+		checkHitActionItems(repID);
+		for (HitActionItem hai : m_ActionItems) {
+			if (hai.getID().equals(actionItemId)) {
+				return hai;
+			}
+		}
+		return null;
+	}
+
+	public void updateHitActionItem(HitActionItem hai, String newStatus, String comment) {
+		HitActionType type = HitActionType.valueOf(newStatus);
+		hai.setHitActionType(type);
+		hai.setInstructions(comment);
+		HitActionItemStorageService.getInstance().save(hai);
+		Database database = DatabaseStorageService.getInstance().getById(hai.getReplicaId());
+		AdminSessionFacade.get().updateActionItemCount(database);
+		DatabaseStorageService.getInstance().save(database);
+
+	}
+
+	public boolean hasHitActionItem(String repID, String actionItemId) {
+		return getHitActionItem(repID, actionItemId) != null;
+	}
+
+	public void reloadActionItems(String repID) {
+		m_ActionItems = null;
+		checkHitActionItems(repID);
+	}
+
+	private void checkHitActionItems(String repID) {
+		if (m_ActionItems == null) {
+			m_ActionItems = HitActionItemStorageService.getInstance().getObjectsByForeignId(repID, "lupHitActionItemByReplicaID");
 		}
 	}
 }

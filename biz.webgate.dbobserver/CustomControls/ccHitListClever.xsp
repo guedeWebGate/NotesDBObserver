@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xe="http://www.ibm.com/xsp/coreex">
 	<xp:this.beforePageLoad><![CDATA[#{javascript:viewScope.designElementName = biz.webgate.xpages.dbobserver.bo.DesignElementType.FORM.name();
 viewScope.hitScopeAll = false;}]]></xp:this.beforePageLoad>
 
@@ -31,7 +31,7 @@ viewScope.hitScopeAll = false;}]]></xp:this.beforePageLoad>
 
 			<xp:table styleClass="lotusTable">
 				<xp:tr>
-					<xp:td colspan="3">
+					<xp:td colspan="4">
 						<xp:pager partialRefresh="true" id="pager1" for="rpElements"
 							layout="Previous Separator Group Separator Next">
 						</xp:pager>
@@ -40,7 +40,7 @@ viewScope.hitScopeAll = false;}]]></xp:this.beforePageLoad>
 				<xp:repeat var="elementName" id="rpElements" rows="10">
 					<xp:this.value><![CDATA[#{javascript:hitsBean.getHitMap(""+paramValues.objectId, viewScope.designElementName, viewScope.hitScopeAll)}]]></xp:this.value>
 					<xp:tr>
-						<xp:td colspan="3">
+						<xp:td colspan="4">
 							<xp:link escape="true" id="lnkShow" text="#{javascript:elementName}">
 
 								<xp:eventHandler event="onclick" submit="true"
@@ -56,23 +56,60 @@ viewScope.hitScopeAll = false;}]]></xp:this.beforePageLoad>
 						<xp:this.value><![CDATA[#{javascript:var result =hitsBean.getHitMap(""+paramValues.objectId, viewScope.designElementName, viewScope.hitScopeAll).get(elementName);
 return result;}]]></xp:this.value>
 						<xp:tr>
-							<xp:td style="width:120px"
-								styleClass="lotusFirstCell">
-								<xp:text escape="true"
-									id="computedField4" value="#{hitElement.patternType}">
+							<xp:td style="width:120px" styleClass="lotusFirstCell">
+								<xp:text escape="true" id="computedField4" value="#{hitElement.patternType}">
 								</xp:text>
 							</xp:td>
-							<xp:td>
+							<xp:td style="width:120px">
 								<xp:text escape="true" id="computedField3" value="#{hitElement.event}">
 								</xp:text>
 							</xp:td>
-							<xp:td style="width:120px" styleClass="lotusLastCell">
+							<xp:td>
 								<xp:text escape="true" id="computedField2" value="#{hitElement.path}">
 								</xp:text>
 							</xp:td>
+							<xp:td style="width:315px" styleClass="lotusLastCell">
+								<xp:panel id="panActionItem">
+									<xp:this.rendered><![CDATA[#{javascript:var id = hitElement.ID;
+hitsBean.hasHitActionItem(""+paramValues.objectId, id);}]]></xp:this.rendered>
+									<xp:this.data>
+										<xe:objectData var="actionItem">
+											<xe:this.createObject><![CDATA[#{javascript:javascript:var id = hitElement.ID;
+return hitsBean.getHitActionItem(""+paramValues.objectId, id)}]]></xe:this.createObject>
+										</xe:objectData>
+									</xp:this.data>
+									<xp:comboBox id="cbActionType"
+										defaultValue="#{javascript:actionItem.hitActionType.name()}">
+										<xp:selectItems>
+											<xp:this.value><![CDATA[#{javascript:biz.webgate.xpages.dbobserver.bo.HitActionType.values()}]]></xp:this.value>
+										</xp:selectItems>
+										<xp:eventHandler event="onchange" submit="true"
+											refreshMode="partial" refreshId="panActionItem"
+											disableValidators="true">
+										</xp:eventHandler>
+									</xp:comboBox>
+									<xp:button id="btUpdate" value="update status">
+										<xp:eventHandler event="onclick"
+											submit="true" refreshMode="complete">
+											<xp:this.action><![CDATA[#{javascript:var cb = getComponent("cbActionType").getValue();
+var textElement = getComponent("itInstructions");
+var instr = textElement != null ? textElement.getValue() : "";
+hitsBean.updateHitActionItem(actionItem, cb, instr );
+view.getData()[0].refresh();}]]></xp:this.action>
+										</xp:eventHandler>
+									</xp:button>
+									<xp:br></xp:br>
+									<xp:inputTextarea id="itInstructions" cols="40"
+										rows="3" defaultValue="#{javascript:actionItem.instructions}">
+										<xp:this.rendered><![CDATA[#{javascript:var cb = getComponent("cbActionType").getValue();
+print(cb);
+cb == "SOLVED_WITH_ACTION"}]]></xp:this.rendered>
+									</xp:inputTextarea>
+								</xp:panel>
+							</xp:td>
 						</xp:tr>
 						<xp:tr>
-							<xp:td colspan="3"
+							<xp:td colspan="4"
 								style="padding-left:12.0px;background-color:rgb(239,239,239)">
 								<xp:text escape="false" id="cfContent"
 									value="#{hitElement.hitContentHTML}">
