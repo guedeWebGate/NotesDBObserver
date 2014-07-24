@@ -76,7 +76,8 @@
 						</xp:inputRichText>
 					</xe:formRow>
 				</xe:formTable>
-			</xp:panel>
+				
+				<xc:ccHitListClever></xc:ccHitListClever></xp:panel>
 			<xc:ccNavAll xp:key="facetLeft"></xc:ccNavAll>
 		</xp:this.facets>
 	</xc:ccApplication>

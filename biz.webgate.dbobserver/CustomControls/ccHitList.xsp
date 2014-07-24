@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	xmlns:xpt="http://www.openntf.org/xsp/xpt">
+
+	<xe:dataView id="dataView1" var="hit" rows="100"
+		collapsibleDetail="true">
+		<xe:this.extraColumns>
+			<xe:viewExtraColumn columnName="designElementType"></xe:viewExtraColumn>
+			<xe:viewExtraColumn columnName="event"></xe:viewExtraColumn>
+			<xe:viewExtraColumn columnName="path"></xe:viewExtraColumn>
+		</xe:this.extraColumns>
+		<xp:this.facets>
+			<xp:panel xp:key="detail">
+				<xp:text escape="false" id="cfContent" value="#{hit.hitContent}">
+					<xp:this.converter>
+						<xp:customConverter>
+							<xp:this.getAsString><![CDATA[#{javascript:@ReplaceSubstring(value, "\n", "<br />")}]]></xp:this.getAsString>
+							<xp:this.getAsObject><![CDATA[#{javascript:@ReplaceSubstring(value, "\n", "<br />")}]]></xp:this.getAsObject>
+						</xp:customConverter>
+					</xp:this.converter>
+				</xp:text>
+			</xp:panel>
+		</xp:this.facets>
+
+
+		<xe:this.data>
+			<xpt:objectlistSource scope="view" var="lstHits"
+				sortAttribute="designName" ascending="true">
+				<xpt:this.buildValues><![CDATA[#{javascript:hitsBean.getAllHits(""+paramValues.objectId)}]]></xpt:this.buildValues>
+				<xpt:this.sortableAttributes>
+					<xp:value>designName</xp:value>
+					<xp:value>designElementType</xp:value>
+					<xp:value>event</xp:value>
+					<xp:value>path</xp:value>
+				</xpt:this.sortableAttributes>
+			</xpt:objectlistSource>
+		</xe:this.data>
+		<xe:this.summaryColumn>
+			<xe:viewSummaryColumn columnName="designName"
+				href="#"></xe:viewSummaryColumn>
+		</xe:this.summaryColumn>
+	</xe:dataView>
+</xp:view>

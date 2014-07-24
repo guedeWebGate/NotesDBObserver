@@ -155,7 +155,21 @@ public class Hit implements Serializable {
 	}
 
 	public boolean hasHitReason() {
-		return m_HitContent != null && m_HitReason.size() > 0;
+		return m_HitReason != null && m_HitReason.size() > 0;
 	}
 
+	public String getHitContentHTML() {
+		String contentHTML = m_HitContent;
+		if (hasHitReason()) {
+			for (String reason : m_HitReason) {
+				System.out.println(reason);
+				String[] reasonImp = reason.split("\\$");
+				String pattern = reasonImp[0].replace("(", "\\(");
+				System.out.println(pattern);
+				contentHTML = contentHTML.replaceAll("(?i)("+pattern+")", "<b>$1</b>");
+			}
+		}
+		contentHTML = contentHTML.replace("\n", "<br />");
+		return contentHTML;
+	}
 }

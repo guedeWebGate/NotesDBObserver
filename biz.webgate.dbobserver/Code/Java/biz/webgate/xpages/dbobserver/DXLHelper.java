@@ -8,8 +8,6 @@ import lotus.domino.NoteCollection;
 
 import org.openntf.jaxb.model.domino.DominoUtils;
 import org.openntf.jaxb.model.dxl.Database;
-import org.openntf.jaxb.model.dxl.Note;
-import org.openntf.jaxb.model.dxl.SearchTypes;
 
 import biz.webgate.xpages.dbobserver.bo.DesignElementType;
 import biz.webgate.xpages.dbobserver.bo.Hit;
@@ -64,7 +62,7 @@ public enum DXLHelper {
 
 	private Database getDatabaseDXL(String server, String filePath) throws Throwable {
 		DxlExporter dxle = ExtLibUtil.getCurrentSession().createDxlExporter();
-
+		dxle.setOutputDOCTYPE(false);
 		lotus.domino.Database db = ExtLibUtil.getCurrentSession().getDatabase(server, filePath);
 		NoteCollection nc = db.createNoteCollection(false);
 		nc.selectAllDesignElements(true);

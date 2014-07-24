@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core">
+	<xp:this.beforePageLoad><![CDATA[#{javascript:viewScope.designElementName = biz.webgate.xpages.dbobserver.bo.DesignElementType.FORM.name();
+viewScope.hitScopeAll = false;}]]></xp:this.beforePageLoad>
+
+	<xp:text escape="true" id="cfReportTitle" tagName="h1">
+		<xp:this.value><![CDATA[#{javascript:"Analyse report"}]]></xp:this.value>
+	</xp:text>
+	<xp:text escape="true" id="computedField1" tagName="h2">
+		<xp:this.value><![CDATA[#{javascript:hitsBean.getAllHits(""+paramValues.objectId).size() +" Code Elements found. "+ hitsBean.getAllHitsWithReason(""+paramValues.objectId).size() +" with problems"}]]></xp:this.value>
+	</xp:text>
+	<xp:panel>
+		<xp:comboBox id="cbDesignElement" value="#{viewScope.designElementName}">
+			<xp:selectItems>
+				<xp:this.value><![CDATA[#{javascript:biz.webgate.xpages.dbobserver.bo.DesignElementType.values();}]]></xp:this.value>
+			</xp:selectItems>
+			<xp:eventHandler event="onchange" submit="true"
+				refreshMode="partial" refreshId="panResult">
+			</xp:eventHandler>
+		</xp:comboBox>
+		<xp:checkBox text="Only problem code" id="checkBox1"
+			value="#{viewScope.hitScopeAll}" checkedValue="FALSE" uncheckedValue="TRUE">
+			<xp:this.converter>
+				<xp:convertBoolean></xp:convertBoolean>
+			</xp:this.converter>
+			<xp:eventHandler event="onchange" submit="true"
+				refreshMode="partial" refreshId="panResult">
+			</xp:eventHandler>
+		</xp:checkBox>
+		<xp:panel id="panResult">
+
+			<xp:table styleClass="lotusTable">
+				<xp:tr>
+					<xp:td colspan="3">
+						<xp:pager partialRefresh="true" id="pager1" for="rpElements"
+							layout="Previous Separator Group Separator Next">
+						</xp:pager>
+					</xp:td>
+				</xp:tr>
+				<xp:repeat var="elementName" id="rpElements" rows="10">
+					<xp:this.value><![CDATA[#{javascript:hitsBean.getHitMap(""+paramValues.objectId, viewScope.designElementName, viewScope.hitScopeAll)}]]></xp:this.value>
+					<xp:tr>
+						<xp:td colspan="3">
+							<xp:link escape="true" id="lnkShow" text="#{javascript:elementName}">
+
+								<xp:eventHandler event="onclick" submit="true"
+									refreshMode="partial" refreshId="panResult">
+									<xp:this.action><![CDATA[#{javascript:hitsBean.toggleExpand(elementName)}]]></xp:this.action>
+								</xp:eventHandler>
+							</xp:link>
+						</xp:td>
+					</xp:tr>
+					<xp:repeat var="hitElement" rows="10" id="rpEvents"
+						disableOutputTag="true" repeatControls="false"
+						rendered="#{javascript:hitsBean.isExpanded(elementName)}">
+						<xp:this.value><![CDATA[#{javascript:var result =hitsBean.getHitMap(""+paramValues.objectId, viewScope.designElementName, viewScope.hitScopeAll).get(elementName);
+return result;}]]></xp:this.value>
+						<xp:tr>
+							<xp:td style="width:120px"
+								styleClass="lotusFirstCell">
+								<xp:text escape="true"
+									id="computedField4" value="#{hitElement.patternType}">
+								</xp:text>
+							</xp:td>
+							<xp:td>
+								<xp:text escape="true" id="computedField3" value="#{hitElement.event}">
+								</xp:text>
+							</xp:td>
+							<xp:td style="width:120px" styleClass="lotusLastCell">
+								<xp:text escape="true" id="computedField2" value="#{hitElement.path}">
+								</xp:text>
+							</xp:td>
+						</xp:tr>
+						<xp:tr>
+							<xp:td colspan="3"
+								style="padding-left:12.0px;background-color:rgb(239,239,239)">
+								<xp:text escape="false" id="cfContent"
+									value="#{hitElement.hitContentHTML}">
+									<xp:this.converter>
+										<xp:customConverter>
+											<xp:this.getAsString><![CDATA[#{javascript:@ReplaceSubstring(value, "\n", "<br />")}]]></xp:this.getAsString>
+											<xp:this.getAsObject><![CDATA[#{javascript:@ReplaceSubstring(value, "\n", "<br />")}]]></xp:this.getAsObject>
+										</xp:customConverter>
+									</xp:this.converter>
+								</xp:text>
+							</xp:td>
+						</xp:tr>
+					</xp:repeat>
+
+				</xp:repeat>
+			</xp:table>
+		</xp:panel>
+	</xp:panel>
+</xp:view>
