@@ -71,8 +71,10 @@ context.reloadPage();}]]></xp:this.action>
 
 									<xp:actionGroup>
 
+
+
 										<xp:executeScript
-											script="#{javascript:dbScan.scanStatus =biz.webgate.xpages.dbobserver.bo.ScanStatus.CHECKED;}">
+											script="#{javascript:dbScan.scanStatus =biz.webgate.xpages.dbobserver.bo.ScanStatus.SCANNED;}">
 										</xp:executeScript>
 										<xp:saveDocument var="dbScan"></xp:saveDocument>
 									</xp:actionGroup>

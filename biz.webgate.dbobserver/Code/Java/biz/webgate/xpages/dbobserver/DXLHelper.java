@@ -71,6 +71,21 @@ public enum DXLHelper {
 			lotus.domino.Database db = ExtLibUtil.getCurrentSession().getDatabase(server, filePath);
 			NoteCollection nc = db.createNoteCollection(false);
 			nc.selectAllDesignElements(true);
+			//nc.setSelectActions(true);
+			//nc.setSelectAgents(true);
+			//nc.setSelectDatabaseScript(true);
+			//nc.setSelectDataConnections(true);
+			//nc.setSelectFolders(true);
+			//nc.setSelectForms(true);
+			//nc.setSelectFramesets(true);
+			//nc.setSelectJavaResources(true);
+			//nc.setSelectOutlines(true);
+			//nc.setSelectPages(true);
+			//nc.setSelectScriptLibraries(true);
+			//nc.setSelectSharedFields(true);
+			//nc.setSelectSubforms(true);
+			//nc.setSelectViews(true);
+
 			nc.buildCollection();
 			Database dxldb = null;
 			dxldb = DominoUtils.INSTANCE.getDXLDatabase(dxle, nc);

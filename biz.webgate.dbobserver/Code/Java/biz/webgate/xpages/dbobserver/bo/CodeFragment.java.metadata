@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="1.0" replicaid="C1257D1C0055A607" version="9.0" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="316" sequence="12" unid="872C401CD567A30BC1257D2000449FFB">
+<created><datetime dst="true">20140725T142934,03+02</datetime></created>
+<modified><datetime dst="true">20140725T145505,97+02</datetime></modified>
+<revised><datetime dst="true">20140725T145505,96+02</datetime></revised>
+<lastaccessed><datetime dst="true">20140725T145505,97+02</datetime></lastaccessed>
+<addedtofile><datetime dst="true">20140725T142934,04+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Christian Guedemann/O=WGC/C=CH</name></updatedby>
+<wassignedby><name>CN=Christian Guedemann/O=WGC/C=CH</name></wassignedby>
+<item name="$Flags"><text>34567Cg~[</text></item>
+<item name="$TITLE"><text>biz/webgate/xpages/dbobserver/bo/CodeFragment.java</text></item>
+
+<item name="$DesignerVersion"><text>8.5.3</text></item>
+
+
+<item name="$FileNames" sign="true"><text>biz/webgate/xpages/dbobserver/bo/CodeFragment.java</text></item>
+
+</note>
